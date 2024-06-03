@@ -13,7 +13,7 @@ const app = express();
 
 app.use(bodyParser.json());
 
-const PORT = 5000;
+const PORT = 9000;
 
 app.use('/person', PersonRoutes);
 app.use('/menu', MenuRoutes);
