@@ -1,4 +1,4 @@
-// video 9 start 50:04
+// video 10 start 00:00
 import express from 'express';
 import connectDB from './db.js';
 import bodyParser from 'body-parser';
