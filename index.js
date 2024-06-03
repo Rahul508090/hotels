@@ -1,4 +1,4 @@
-// video 9 start 
+// video 9 start 17:25
 import express from 'express';
 import connectDB from './db.js';
 import bodyParser from 'body-parser';
@@ -17,6 +17,8 @@ const PORT = 5000;
 
 app.use('/person', PersonRoutes);
 app.use('/menu', MenuRoutes);
+
+// Listen for requests
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
