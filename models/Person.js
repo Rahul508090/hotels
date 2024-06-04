@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-
+import brypt from "bcrypt";
 
 const PersonSchema = new mongoose.Schema(
     {
@@ -8,7 +8,7 @@ const PersonSchema = new mongoose.Schema(
             required: [true, 'Please provide a name'],
             minlength: [3, 'Name must be at least 3 characters'],
             maxlength: [50, 'Name must be less than 50 characters']
-            
+
         },
         age: {
             type: Number,
@@ -45,6 +45,18 @@ const PersonSchema = new mongoose.Schema(
             required: [true, 'Please provide a salary'],
             min: [1000, 'Salary must be at least 1000'],
             max: [100000, 'Salary must be less than 100000']
+        },
+        username: {
+            type: String,
+            required: [true, 'Please provide a username'],
+            minlength: [3, 'Username must be at least 3 characters'],
+            maxlength: [50, 'Username must be less than 50 characters']
+        },
+        password: {
+            type: String,
+            required: [true, 'Please provide a password'],
+            minlength: [3, 'Password must be at least 3 characters'],
+            maxlength: [50, 'Password must be less than 50 characters']
         }
     },
 
@@ -52,5 +64,32 @@ const PersonSchema = new mongoose.Schema(
         timestamps: true
     }
 )
+
+PersonSchema.pre('save', async function (next) {
+    const person = this;
+    if (!person.isModified('password')) {
+        console.log("Password has not modified");
+        return next();
+    }
+
+    try {
+        const saltRounds = await brypt.genSalt(10);
+        const hashedPassword = await brypt.hash(person.password, saltRounds);
+        person.password = hashedPassword
+        next();
+    } catch (error) {
+        console.log(error);
+        return next(error);
+    }
+});
+
+PersonSchema.methods.comparePassword = async function (enteredPassword) {
+    try {
+        const isMatch = await brypt.compare(enteredPassword, this.password);
+        return isMatch;
+    } catch (error) {
+        throw error;
+    }
+}
 
 export const Person = mongoose.model("Person", PersonSchema);

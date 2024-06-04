@@ -13,12 +13,14 @@ router.post('/', async (req, res) => {
     }
 })
 
+
+
 router.get('/', async (req, res) => {
     try {
-        const person = await Person.find({});
-        res.status(200).json(person);
+        const menu = await Person.find({});
+        res.status(200).json(menu);
     } catch (err) {
-        res.status(400).json({ message: 'Error in getting person' });
+        res.status(400).json({ message: 'Error in getting menu' });
     }
 })
 
@@ -37,5 +39,5 @@ router.get('/:work', async (req, res) => {
     }
 })
 
- 
+
 export default router;
